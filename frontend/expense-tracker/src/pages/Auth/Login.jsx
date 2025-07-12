@@ -1,15 +1,19 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import AuthLayout from '../../components/layouts/AuthLayout'
 import { useNavigate } from 'react-router-dom';
 import Input from '../../components/Inputs/Input'; 
 import { Link } from 'react-router-dom';
 import { validateEmail } from '../../utils/helper';
+import axiosInstance from '../../utils/axiosInstance';
+import { API_PATHS } from '../../utils/apiPaths';
+import { UserContext } from '../../context/userContext';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
-  const [shakePassword, setShakePassword] = useState(false);
+ 
+  const { updateUser } = useContext(UserContext);
 
   
   const navigate = useNavigate();
@@ -25,14 +29,33 @@ const Login = () => {
 
     if(!password) {
       setError('Password is required');
-      setShakePassword(true); 
-      setTimeout(() => setShakePassword(false), 300);
       return;
     }
 
     setError("");
 
     // Login Api call
+    try{
+      const response = await axiosInstance.post(API_PATHS.AUTH.LOGIN, {
+        email,
+        password,
+      });
+
+      const { token , user } = response.data;
+
+      if(token) {
+        localStorage.setItem('token', token);
+        updateUser(user);
+        navigate('/dashboard');
+        
+      }
+    }catch(error){
+      if (error.response && error.response.data.message) { 
+        setError(error.response.data.message);
+      }else {
+        setError("Something went wrong. Please try again.");
+      }
+    }
   }
 
   return (
@@ -58,7 +81,6 @@ const Login = () => {
             label = "Password"
             placeholder = "Minimum 8 characters"
             type="password" 
-            className={shakePassword ? "shake" : ""}
           />
         
           {error && <p className="text-red-500 text-xs pb-2.5">{error}</p>}
@@ -79,4 +101,4 @@ const Login = () => {
   );
 };
 
-export default Login
+export default Login;
