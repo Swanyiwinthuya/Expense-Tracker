@@ -1,5 +1,6 @@
 import {
     LuLayoutDashboard,
+    LuLayoutGrid,
     LuHandCoins,
     LuWalletMinimal,
     LuSettings,
@@ -27,6 +28,18 @@ export const SIDE_MENU_DATA = [
         label: "Expense",
         icon: LuWalletMinimal,
         path: "/expense",
+    },
+    {
+        id: "04",
+        label: "Settings",
+        icon: LuSettings,
+        path: "/settings",
+    },
+    {
+        id: "05",
+        label: "Profile",
+        icon: LuUser,
+        path: "/profile",
     },
     {
         id: "06",

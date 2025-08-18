@@ -1,4 +1,4 @@
-import React, { useEffect,useState} from 'react';
+import React, { useEffect,useState, useContext} from 'react';
 import DashboardLayout from '../../components/layouts/DashboardLayout';
 import { useUserAuth } from '../../hooks/useUserAuth';
 import { useNavigate } from 'react-router-dom';
@@ -6,6 +6,8 @@ import axiosInstance from '../../utils/axiosInstance';
 import { API_PATHS } from '../../utils/apiPaths';
 import InfoCard from '../../components/Cards/InfoCard';
 import RecentTransactions from '../../components/Dashboard/RecentTransactions';
+import { UserContext } from '../../context/UserContext';
+import { formatCurrency } from '../../utils/currency';
 
 import { LuHandCoins, LuWalletMinimal } from 'react-icons/lu';
 import { IoMdCard } from 'react-icons/io';
@@ -23,6 +25,11 @@ const Home = () => {
 
   const [dashboardData, setDashboardData] = useState(null);
   const[loading, setLoading] = useState(false);
+
+  // get prefs from context (currency/language)
+  const { prefs } = useContext(UserContext) || {};
+  const appCurrency = prefs?.currency || 'THB';
+  const appLanguage = prefs?.language || 'en';
 
   const fetchDashboardData = async () => {
     if (loading) return;
@@ -53,21 +60,23 @@ const Home = () => {
           <InfoCard
             icon = {<IoMdCard />}
             label = "Total Balance"
-            value = {addThousandsSeparator(dashboardData?.totalBalance || 0)}
+            value = {formatCurrency(dashboardData?.totalBalance || 0, appCurrency, appLanguage)}
             color ="bg-indigo-500"
           />
 
           <InfoCard
             icon = {<LuWalletMinimal />}
             label = "Total Income"
-            value = {addThousandsSeparator(dashboardData?.totalIncome || 0)}
+            // CHANGED: show selected currency
+            value = {formatCurrency(dashboardData?.totalIncome || 0, appCurrency, appLanguage)}
             color ="bg-orange-500"
           />
 
           <InfoCard
             icon = {<LuHandCoins />}
             label = "Total Expense"
-            value = {addThousandsSeparator(dashboardData?.totalExpenses || 0)}
+            // CHANGED: show selected currency
+            value = {formatCurrency(dashboardData?.totalExpenses || 0, appCurrency, appLanguage)}
             color ="bg-red-500"
           />
         </div>

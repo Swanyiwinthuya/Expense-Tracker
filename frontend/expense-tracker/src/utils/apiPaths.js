@@ -4,10 +4,17 @@ export const API_PATHS = {
     AUTH: {
         LOGIN: "/api/v1/auth/login",
         REGISTER: "/api/v1/auth/register",
+        GOOGLE: '/api/v1/auth/google',
+        CHANGE_PASSWORD: '/api/v1/auth/change-password',
         GET_USER_INFO: "/api/v1/auth/getUser",
     },
     DASHBOARD: {
         GET_DATA: "/api/v1/dashboard",
+    },
+    USER: {
+    ME: '/auth/me',
+    UPDATE_PREFS: '/users/me/preferences',    
+    DELETE_ME: '/users/me',                   
     },
     INCOME: {
         ADD_INCOME: "/api/v1/income/add",

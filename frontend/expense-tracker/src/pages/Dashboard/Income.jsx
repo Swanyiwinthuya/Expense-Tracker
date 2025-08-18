@@ -125,8 +125,9 @@ const Income = () => {
     return () => {};
   }, []);
 
+  // CHANGED: activeMenu should be "Income" (was "Dashboard")
   return (
-    <DashboardLayout activeMenu ="Dashboard">
+    <DashboardLayout activeMenu ="Income">
       <div className='my-5 mx-auto'>
         <div className='grid grid-cols-1 gap-6'>
           <div className ="">
@@ -171,7 +172,5 @@ const Income = () => {
     </DashboardLayout>
   );
 };
-
-
 
 export default Income;
